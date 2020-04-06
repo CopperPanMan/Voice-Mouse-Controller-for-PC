@@ -18,14 +18,14 @@ calcMidPitch = int((lowPitch+highPitch)/2)
 
 channels, chunk, fs, seconds = 1, int(1024/2), 16000, .06 #chunks per sample, sample rate, duration of each while loop recording
 sample_format = pyaudio.paInt16  # 16 bits per sample
-filename = str(time.time())+".wav"
+filename = "testfile.wav"
 
 def logic():
     # Main Logic (only execute logic if noise is above a threshold), start by releasing all keys
     global X1, X2, Low1, Low2, Low3, High1, High2, High3, volume, pitch, midVolume, highVolume, verylowPitch, lowPitch, midPitch, highPitch, veryhighPitch, silence
     
     if (volume <= 2):
-        if silence == False:
+        if silence == False: #this makes it only release keys the first instant you're silent and not continuosly, making your computer usable if you're quiet
             KeyPressing.ReleaseAll()
         silence = True
     if (volume > 2):
