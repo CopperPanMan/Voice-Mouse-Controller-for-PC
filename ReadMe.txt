@@ -1,4 +1,4 @@
-This program allows you to control your PC's mouse and keyboard via voice controls, entirely based on pitch and volume. You'll need a microphone for this to work. 
+This program allows you to control your PC's mouse and keyboard via voice controls, entirely based on pitch and volume. You'll need a microphone for this to work. Try to put the images in the same folder/directory as the exe (program) file.
 
 Included are 3 different modes - one for controlling just your mouse (as a full replacement to a mouse with L/R clicking, scrolling, and dragging),
 one for controlling your mouse and keyboard (in the context of a first-person-shooter (FPS) game, and finally one that is the same as the FPS version 
@@ -14,4 +14,3 @@ Here's what the variables do if it's unclear:
 	>>Very Low Pitch, Low Pitch = how low you have to "sing" to perform the very low action or low action, respectively
 	>>Middle Pitch = the threshold for when your mouse goes from moving left to right or vice versa
 	>>High Pitch, Very High Pitch = how high you have to "sing" to perform the very high or high action, respectively
-
