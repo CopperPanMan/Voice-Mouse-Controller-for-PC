@@ -1,7 +1,6 @@
 import ctypes
 import time
 import win32api, win32con
-import pyautogui
 
 SendInput = ctypes.windll.user32.SendInput
 
@@ -60,20 +59,16 @@ def MoveMouse(x, y):
     time.sleep(.005)
     win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, x, y, 0, 0)
 
-
-def NoKeysPressed(): #specific to the hotkeys Halo Reach uses, not used in final version
-    if (win32api.GetKeyState(0x45) == 0 or win32api.GetKeyState(0x45) == 1): #e
-        if (win32api.GetKeyState(0x57) == 0 or win32api.GetKeyState(0x57) == 1): #w
-            if (win32api.GetKeyState(0x52) == 0 or win32api.GetKeyState(0x52) == 1): #r
-                return 1
+def ReleaseAll(): #releases all keys
+    win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP,0,0) #left mouse
 
 def ReleaseAll(): #specific to the hotkeys Halo Reach uses
-    ReleaseKey(0x11)
-    ReleaseKey(0x2a)
-    ReleaseKey(0x12)
-    ReleaseKey(0x13)
-    ReleaseKey(0x22)
-    ReleaseKey(0x39) #shift
+    ReleaseKey(0x11) #w
+    ReleaseKey(0x2a) #left shift
+    ReleaseKey(0x12) #e
+    ReleaseKey(0x13) #r (?)
+    ReleaseKey(0x22) #g
+    ReleaseKey(0x39) #spacebar
     ReleaseKey(0x10) #q
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP,0,0)
 
