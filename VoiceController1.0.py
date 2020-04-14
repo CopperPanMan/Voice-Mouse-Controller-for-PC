@@ -12,6 +12,8 @@ from threading import Thread
 import io #io and sys are for suppressing the crepe default text output
 import sys
 import os #for file IO
+import pkg_resources.py2_warn
+import unittest.mock
 
 wsh = comclt.Dispatch("WScript.Shell")
 
@@ -66,11 +68,11 @@ def mouse_logic():
                     actionReadoutText.config(text="Action: DOWN ARROW")
                     wsh.SendKeys("{DOWN}")
                     wsh.SendKeys("{DOWN}")
-                    time.sleep(0.1)
                 elif (pitch <= lowPitch):
                     actionReadoutText.config(text="Action: DRAGGING")
-                    dragging = True
-                    win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN,0,0)
+                    if dragging == False:
+                        dragging = True
+                        win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN,0,0)
                 else:
                     actionReadoutText.config(text="Action: MOVING MOUSE")
                     if volume-midVolume < speedLimit:
@@ -92,7 +94,6 @@ def mouse_logic():
                     actionReadoutText.config(text="Action: UP ARROW")
                     wsh.SendKeys("{UP}")
                     wsh.SendKeys("{UP}")
-                    time.sleep(0.1)
                 elif (pitch > highPitch and dragging == False):
                     actionReadoutText.config(text="Action: RIGHT-CLICK")
                     win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTDOWN,0,0)
@@ -350,39 +351,6 @@ if __name__ == '__main__':
         global stopLogic, lowVolume, midVolume, highVolume, lowPitch, midPitch, highPitch, speedLimit, calcmidPitch, veryhighPitch, verylowPitch, mouseLogicTemp, fpsKeysLogicTemp, fpsLogicTemp, fpsKeysLogic, statusText, mouseLogic, fpsKeysLogic, sensativity, startButtonState, stopLogic, fpsLogic, X
         lowVolume, midVolume, highVolume = int(lVolumeField.get()), int(mVolumeField.get()), int(hVolumeField.get())
         lowPitch, midPitch, highPitch, veryhighPitch, verylowPitch, sensativity = int(lPitchField.get()), int(mPitchField.get()), int(hPitchField.get()), int(vhPitchField.get()), int(vlPitchField.get()), int(sensativitySlider.get())
-        #mouseLogic, fpsKeysLogic, fpsKeysLogic = mouseLogicTemp, fpsKeysLogicTemp, fpsLogicTemp
-        #if startButtonState == 1: #if it is the start button
-        #    if ((mouseLogic == True) and ((lowVolume < midVolume and midVolume < highVolume) and (midPitch < highPitch))):
-        #        startButtonState = 0
-        #        startButton.config(text="STOP", bg="#F08080")
-        #        statusText.config(text="MOUSE VERSION is now RUNNING.")
-        #        stopLogic = False
-        #        Thread(target = logicImplementation).start()
-        #    elif ((fpsKeysLogic == True) and ((lowVolume < highVolume) and (verylowPitch < lowPitch and lowPitch < midPitch and midPitch < highPitch and highPitch < veryhighPitch))):
-        #        startButtonState = 0
-        #        startButton.config(text="STOP", bg="#F08080")
-        #        statusText.config(text="FPS VERSION is now RUNNING.")
-        #        stopLogic = False
-        #        Thread(target = logicImplementation).start()
-        #    elif ((lowVolume < midVolume and midVolume < highVolume) and (verylowPitch < lowPitch and lowPitch < midPitch and midPitch < highPitch and highPitch < veryhighPitch)):
-        #        startButtonState = 0
-        #        startButton.config(text="STOP", bg="#F08080")
-        #        statusText.config(text="FPS VERSION (KEYS ONLY) is now RUNNING.")
-        #        stopLogic = False
-        #        Thread(target = logicImplementation).start()
-        #    else:
-        #        statusText.config(text="*******Make sure inputs are integers and in order, then try again******")
-        #else: #it is the stop button
-        #    startButtonState = 1
-        #    mouseLogic, fpsLogic, fpsKeysLogic = False, False, False
-        #    stopLogic = True
-        #    statusText.config(text="The program is now STOPPED")
-        #    if mouseLogicTemp == True:
-        #        startButton.config(text="START MOUSE", bg="#90EE90")
-        #    elif fpsKeysLogicTemp == True:
-        #        startButton.config(text="START FPS", bg="#90EE90")
-        #    else:
-        #        startButton.config(text="START FPS (KEYS)", bg="#90EE90")
 
         if ((mouseLogicTemp == True) and ((lowVolume < midVolume and midVolume < highVolume) and (midPitch < highPitch))): #Data Validation
             dataValidated = True
@@ -393,6 +361,10 @@ if __name__ == '__main__':
         else:
             dataValidated = False
 
+        actionReadoutText.config(text="Action: ")
+        pitchReadoutText.config(text="Pitch: ")
+        volumeReadoutText.config(text="Volume: ")
+
         if dataValidated == True:
             if mouseLogic == True: #if mouse is running when button pressed
                 if mouseLogicTemp == True: #mouse tab is open
@@ -400,6 +372,9 @@ if __name__ == '__main__':
                     statusText.config(text="The program is now STOPPED.")
                     mouseLogic, fpsLogic, fpsKeysLogic = False, False, False
                     stopLogic = True
+                    actionReadoutText.config(text="Action: ")
+                    pitchReadoutText.config(text="Pitch: ")
+                    volumeReadoutText.config(text="Volume: ")
                 elif fpsLogicTemp == True: #fps tab is open
                     startButton.config(text="STOP", bg="#F08080")
                     statusText.config(text="FPS VERSION is now RUNNING.")
@@ -415,6 +390,9 @@ if __name__ == '__main__':
                     statusText.config(text="The program is now STOPPED.")
                     mouseLogic, fpsLogic, fpsKeysLogic = False, False, False
                     stopLogic = True
+                    actionReadoutText.config(text="Action: ")
+                    pitchReadoutText.config(text="Pitch: ")
+                    volumeReadoutText.config(text="Volume: ")
                 elif fpsKeysLogicTemp == True: #fps keys tab is open
                     startButton.config(text="STOP", bg="#F08080")
                     statusText.config(text="FPS (keys only) VERSION is now RUNNING.")
@@ -430,6 +408,9 @@ if __name__ == '__main__':
                     statusText.config(text="The program is now STOPPED.")
                     mouseLogic, fpsLogic, fpsKeysLogic = False, False, False
                     stopLogic = True
+                    actionReadoutText.config(text="Action: ")
+                    pitchReadoutText.config(text="Pitch: ")
+                    volumeReadoutText.config(text="Volume: ")
                 elif mouseLogicTemp == True: #mouse tab open
                     startButton.config(text="STOP", bg="#F08080")
                     statusText.config(text="MOUSE VERSION is now RUNNING.")
@@ -564,6 +545,7 @@ if __name__ == '__main__':
         saveStatus.after(3000, saveStatus_clear)
 
     ###### creating widgets #######
+    root.iconbitmap("voice_control_logo.ico")
     lVolumeText = Label(root, text="Low Volume (silence): ") #creating text widgets
     mVolumeText = Label(root, text="Middle Volume: ")
     hVolumeText = Label(root, text="High Volume: ")
